@@ -16,6 +16,7 @@ import {
   connectableFeature,
   createFeatureSet,
   deletableFeature,
+  editFeature,
   fadeFeature,
   hoverFeedbackFeature,
   layoutContainerFeature,
@@ -135,7 +136,7 @@ test('converts a diagram', () => {
       expect((edge as any).targetId).toBe(odWebEdge.targetId);
       expect((edge as any).routingPoints).toBe(odWebEdge.routingPoints);
       expect(edge.features).toStrictEqual(
-        createFeatureSet([deletableFeature, selectFeature, fadeFeature, hoverFeedbackFeature])
+        createFeatureSet([deletableFeature, selectFeature, fadeFeature, hoverFeedbackFeature, editFeature])
       );
     }
   }

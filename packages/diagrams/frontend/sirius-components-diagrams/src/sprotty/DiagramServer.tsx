@@ -46,6 +46,7 @@ import {
   SingleClickOnTwoDiagramElementsTool,
   Tool,
 } from '../representation/DiagramRepresentation.types';
+import { IsSiriusModelElementAction, IsSiriusModelElementResult } from './common/isSiriusModelElementRequest';
 import { convertDiagram } from './convertDiagram';
 import { Label } from './Diagram.types';
 import {
@@ -268,11 +269,17 @@ export class DiagramServer extends ModelSource {
     }
   }
 
-  handleMoveAction(action) {
+  handleMoveAction(action: MoveAction) {
     const { finished, moves } = action;
     if (finished && moves.length > 0) {
       const { elementId, toPosition } = moves[0];
-      this.moveElement(elementId, toPosition?.x, toPosition?.y);
+      this.actionDispatcher
+        .request<IsSiriusModelElementResult>(IsSiriusModelElementAction.create(elementId))
+        .then((isSiriusModelElementResult) => {
+          if (isSiriusModelElementResult.isSiriusModelElement) {
+            this.moveElement(elementId, toPosition?.x, toPosition?.y);
+          }
+        });
     }
   }
   handleResizeAction(action: ResizeAction) {

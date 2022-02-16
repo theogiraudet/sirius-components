@@ -50,6 +50,7 @@ import {
   zorderModule,
 } from 'sprotty';
 import { Action, Point, RequestPopupModelAction, SetPopupModelAction, UpdateModelAction } from 'sprotty-protocol';
+import { siriusCommonModule } from './common/siriusCommonModule';
 import { BorderNode, Label, Node } from './Diagram.types';
 import { DiagramServer, HIDE_CONTEXTUAL_TOOLBAR_ACTION, SPROTTY_DELETE_ACTION } from './DiagramServer';
 import { SetActiveConnectorToolsAction, SetActiveToolAction } from './DiagramServer.types';
@@ -130,6 +131,7 @@ export const createDependencyInjectionContainer = (containerId: string, getCurso
   const container = new Container();
   container.load(
     defaultModule,
+    siriusCommonModule,
     boundsModule,
     selectModule,
     siriusDragAndDropModule,

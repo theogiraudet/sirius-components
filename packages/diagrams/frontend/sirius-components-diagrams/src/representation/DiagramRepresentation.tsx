@@ -26,7 +26,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { useMachine } from '@xstate/react';
 import { useCallback, useContext, useEffect, useRef } from 'react';
 import { EditLabelAction, HoverFeedbackAction, SEdge, SGraph, SModelElement, SNode, SPort } from 'sprotty';
-import { FitToScreenAction } from 'sprotty-protocol';
+import { FitToScreenAction, Point } from 'sprotty-protocol';
 import { v4 as uuid } from 'uuid';
 import { DropArea } from '../droparea/DropArea';
 import { ContextualMenu } from '../palette/ContextualMenu';
@@ -71,6 +71,9 @@ import {
   GQLInvokeSingleClickOnTwoDiagramElementsToolSuccessPayload,
   GQLInvokeSingleClickOnTwoDiagramElementsToolVariables,
   GQLSubscribersUpdatedEventPayload,
+  GQLUpdateEdgeRoutingPointsData,
+  GQLUpdateEdgeRoutingPointsInput,
+  GQLUpdateEdgeRoutingPointsVariables,
   Menu,
   Palette,
   Tool,
@@ -107,6 +110,7 @@ import {
   editLabelMutation as editLabelMutationOp,
   invokeSingleClickOnDiagramElementToolMutation,
   invokeSingleClickOnTwoDiagramElementsToolMutation,
+  updateEdgeRoutingPointsOp,
   updateNodeBoundsOp,
   updateNodePositionOp,
 } from './operations';
@@ -379,6 +383,10 @@ export const DiagramRepresentation = ({
   ] = useMutation(updateNodeBoundsOp);
   const [arrangeAllMutation, { loading: arrangeAllLoading, data: arrangeAllData, error: arrangeAllError }] =
     useMutation(arrangeAllOp);
+  const [
+    updateEdgeRoutingPointsMutation,
+    { loading: updateEdgeRoutingPointsLoading, error: updateEdgeRoutingPointsError, data: updateEdgeRoutingPointsData },
+  ] = useMutation<GQLUpdateEdgeRoutingPointsData, GQLUpdateEdgeRoutingPointsVariables>(updateEdgeRoutingPointsOp);
 
   /**
    * Dispatch the diagram to the diagramServer if our state indicate that diagram has changed.
@@ -527,7 +535,7 @@ export const DiagramRepresentation = ({
   );
 
   const moveElement = useCallback(
-    (diagramElementId, newPositionX, newPositionY) => {
+    (diagramElementId: string, newPositionX: number, newPositionY: number) => {
       const input = {
         id: uuid(),
         editingContextId,
@@ -556,6 +564,20 @@ export const DiagramRepresentation = ({
       updateNodeBoundsMutation({ variables: { input } });
     },
     [editingContextId, representationId, updateNodeBoundsMutation]
+  );
+
+  const updateRoutingPointsListener = useCallback(
+    (routingPoints: Point[], edgeId: string) => {
+      const input: GQLUpdateEdgeRoutingPointsInput = {
+        id: uuid(),
+        editingContextId,
+        representationId,
+        diagramElementId: edgeId,
+        routingPoints: routingPoints.map((routingPoint) => ({ x: routingPoint.x, y: routingPoint.y })),
+      };
+      updateEdgeRoutingPointsMutation({ variables: { input } });
+    },
+    [editingContextId, representationId, updateEdgeRoutingPointsMutation]
   );
 
   const invokeHover = (id: string, mouseIsHover: boolean) => {
@@ -683,6 +705,7 @@ export const DiagramRepresentation = ({
         toolSections,
         setContextualPalette,
         setContextualMenu,
+        updateRoutingPointsListener,
         httpOrigin,
       };
       dispatch(initializeRepresentationEvent);
@@ -704,6 +727,7 @@ export const DiagramRepresentation = ({
     httpOrigin,
     dispatch,
     readOnly,
+    updateRoutingPointsListener,
   ]);
 
   useEffect(() => {
@@ -903,6 +927,9 @@ export const DiagramRepresentation = ({
   useEffect(() => {
     handleError(arrangeAllLoading, arrangeAllData, arrangeAllError);
   }, [arrangeAllLoading, arrangeAllData, arrangeAllError, handleError]);
+  useEffect(() => {
+    handleError(updateEdgeRoutingPointsLoading, updateEdgeRoutingPointsData, updateEdgeRoutingPointsError);
+  }, [updateEdgeRoutingPointsLoading, updateEdgeRoutingPointsData, updateEdgeRoutingPointsError, handleError]);
   /**
    * Gather up, it's time for a story.
    *

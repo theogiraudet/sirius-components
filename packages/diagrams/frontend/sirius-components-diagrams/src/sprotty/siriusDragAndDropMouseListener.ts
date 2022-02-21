@@ -65,7 +65,7 @@ export class SiriusDragAndDropMouseListener extends MoveMouseListener {
     return actions;
   }
 
-  public mouseMove(target: SModelElement, event: MouseEvent): Action[] {
+  public override mouseMove(target: SModelElement, event: MouseEvent): Action[] {
     if (this.isResizing()) {
       const result: Action[] = [];
       const action = this.getMouseMoveResizeAction(event, false);
@@ -78,10 +78,10 @@ export class SiriusDragAndDropMouseListener extends MoveMouseListener {
   }
 
   protected isResizing(): Boolean {
-    return this.startResizePosition != undefined;
+    return this.startResizePosition !== undefined;
   }
 
-  public mouseUp(target: SModelElement, event: MouseEvent): Action[] {
+  public override mouseUp(target: SModelElement, event: MouseEvent): Action[] {
     let result: Action[];
     if (this.isResizing()) {
       result = [];
@@ -99,7 +99,7 @@ export class SiriusDragAndDropMouseListener extends MoveMouseListener {
   /**
    * We override the snap method to prevent moving an element out of the container.
    */
-  public snap(position: Point, element: SModelElement, isSnap: boolean): Point {
+  public override snap(position: Point, element: SModelElement, isSnap: boolean): Point {
     let newPosition = super.snap(position, element, isSnap);
     if (this.isSNode(element)) {
       return this.getValidChildPosition(element, newPosition);

@@ -13,6 +13,7 @@
 import { Selection } from '@eclipse-sirius/sirius-components-core';
 import { MutableRefObject } from 'react';
 import { MousePositionTracker, SModelElement, TYPES } from 'sprotty';
+import { Point } from 'sprotty-protocol';
 import { v4 as uuid } from 'uuid';
 import { assign, Machine } from 'xstate';
 import { createDependencyInjectionContainer } from '../sprotty/DependencyInjection';
@@ -108,7 +109,7 @@ export type InitializeRepresentationEvent = {
   diagramDomElement: MutableRefObject<any>;
   deleteElements: any;
   invokeTool: any;
-  moveElement: any;
+  moveElement: (diagramElementId: string, newPositionX: number, newPositionY: number) => void;
   resizeElement: any;
   editLabel: any;
   onSelectElement: (
@@ -122,6 +123,7 @@ export type InitializeRepresentationEvent = {
   toolSections: ToolSection[];
   setContextualPalette: (contextualPalette: Palette) => void;
   setContextualMenu: (contextualMenu: Menu) => void;
+  updateRoutingPointsListener: (routingPoints: Point[], edgeId: string) => void;
   httpOrigin: string;
 };
 
@@ -375,6 +377,7 @@ export const diagramRepresentationMachine = Machine<
           toolSections,
           setContextualPalette,
           setContextualMenu,
+          updateRoutingPointsListener,
           httpOrigin,
         } = event as InitializeRepresentationEvent;
 
@@ -399,6 +402,7 @@ export const diagramRepresentationMachine = Machine<
         diagramServer.setHttpOrigin(httpOrigin);
         diagramServer.setActiveToolListener(setActiveTool);
         diagramServer.setOnSelectElementListener(onSelectElement);
+        diagramServer.setUpdateRoutingPointsListener(updateRoutingPointsListener);
 
         return {
           diagramServer,

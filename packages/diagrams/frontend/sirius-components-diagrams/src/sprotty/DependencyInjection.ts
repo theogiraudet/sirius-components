@@ -19,7 +19,6 @@ import {
   configureViewerOptions,
   ConsoleLogger,
   defaultModule,
-  edgeEditModule,
   edgeLayoutModule,
   EditLabelAction,
   EditLabelActionHandler,
@@ -42,6 +41,7 @@ import {
   SGraph,
   SLabel,
   SModelElement,
+  SRoutingHandle,
   SRoutingHandleView,
   TYPES,
   updateModule,
@@ -55,6 +55,7 @@ import { BorderNode, Label, Node } from './Diagram.types';
 import { DiagramServer, HIDE_CONTEXTUAL_TOOLBAR_ACTION, SPROTTY_DELETE_ACTION } from './DiagramServer';
 import { SetActiveConnectorToolsAction, SetActiveToolAction } from './DiagramServer.types';
 import { edgeCreationFeedback } from './edgeCreationFeedback';
+import { siriusEdgeEditModule } from './edgeEdition/siriusEdgeEditModule';
 import { EditLabelUIWithInitialContent } from './EditLabelUIWithInitialContent';
 import { GraphFactory } from './GraphFactory';
 import { siriusRoutingModule } from './routing/siriusRoutingModule';
@@ -118,8 +119,8 @@ const siriusWebContainerModule = new ContainerModule((bind, unbind, isBound, reb
   configureView({ bind, isBound }, 'html', HtmlRootView);
   // @ts-ignore
   configureView({ bind, isBound }, 'pre-rendered', PreRenderedView);
-  configureView({ bind, isBound }, 'routing-point', SRoutingHandleView);
-  configureView({ bind, isBound }, 'volatile-routing-point', SRoutingHandleView);
+  configureModelElement(context, 'routing-point', SRoutingHandle, SRoutingHandleView);
+  configureModelElement(context, 'volatile-routing-point', SRoutingHandle, SRoutingHandleView);
 });
 
 /**
@@ -143,7 +144,7 @@ export const createDependencyInjectionContainer = (containerId: string, getCurso
     updateModule,
     modelSourceModule,
     siriusRoutingModule,
-    edgeEditModule,
+    siriusEdgeEditModule,
     edgeLayoutModule,
     zorderModule,
     siriusWebContainerModule,

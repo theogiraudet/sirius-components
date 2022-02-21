@@ -11,9 +11,11 @@
  *     Obeo - initial API and implementation
  *******************************************************************************/
 import { ContainerModule } from 'inversify';
-import { configureCommand } from 'sprotty';
+import { configureCommand, TYPES } from 'sprotty';
+import { CursorMouseListener } from './CursorMouseListener';
 import { IsSiriusModelElementCommand } from './isSiriusModelElementRequest';
 
-export const siriusCommonModule = new ContainerModule((bind, unbind, isBound, rebind) => {
+export const siriusCommonModule = new ContainerModule((bind, _unbind, isBound) => {
   configureCommand({ bind, isBound }, IsSiriusModelElementCommand);
+  bind(TYPES.MouseListener).to(CursorMouseListener).inSingletonScope();
 });

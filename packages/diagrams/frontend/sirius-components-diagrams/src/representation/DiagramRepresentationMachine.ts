@@ -19,6 +19,7 @@ import { assign, Machine } from 'xstate';
 import { createDependencyInjectionContainer } from '../sprotty/DependencyInjection';
 import { DiagramServer } from '../sprotty/DiagramServer';
 import {
+  CursorValue,
   GQLDiagram,
   Menu,
   Palette,
@@ -118,7 +119,7 @@ export type InitializeRepresentationEvent = {
     position: Position,
     event: MouseEvent
   ) => void;
-  getCursorOn: any;
+  getCursorOn: (element, diagramServer: DiagramServer) => CursorValue;
   setActiveTool: (tool: Tool) => void;
   toolSections: ToolSection[];
   setContextualPalette: (contextualPalette: Palette) => void;
@@ -381,7 +382,7 @@ export const diagramRepresentationMachine = Machine<
           httpOrigin,
         } = event as InitializeRepresentationEvent;
 
-        const container = createDependencyInjectionContainer(diagramDomElement.current.id, getCursorOn);
+        const container = createDependencyInjectionContainer(diagramDomElement.current.id);
         const diagramServer = <DiagramServer>container.get(TYPES.ModelSource);
 
         /**
@@ -403,6 +404,7 @@ export const diagramRepresentationMachine = Machine<
         diagramServer.setActiveToolListener(setActiveTool);
         diagramServer.setOnSelectElementListener(onSelectElement);
         diagramServer.setUpdateRoutingPointsListener(updateRoutingPointsListener);
+        diagramServer.setGetCursorOnListener(getCursorOn);
 
         return {
           diagramServer,

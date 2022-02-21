@@ -55,6 +55,7 @@ import {
 import { edgeCreationFeedback } from '../sprotty/edgeCreationFeedback';
 import { Toolbar } from '../toolbar/Toolbar';
 import {
+  CursorValue,
   GQLDeletionPolicy,
   GQLDiagramEventPayload,
   GQLDiagramEventSubscription,
@@ -632,8 +633,8 @@ export const DiagramRepresentation = ({
       diagramServer.actionDispatcher.dispatch(selectSprottyAction);
     };
 
-    const getCursorOn = (element, diagramServer: DiagramServer) => {
-      let cursor = 'pointer';
+    const getCursorOn = (element, diagramServer: DiagramServer): CursorValue => {
+      let cursor: CursorValue = 'pointer';
       if (diagramServer.diagramSource) {
         if (diagramServer.activeConnectorTools.length > 0) {
           const cursorAllowed = atLeastOneSingleClickOnTwoDiagramElementsTool(

@@ -5,6 +5,7 @@
 === Architectural decision records
 
 - [ADR-069] Add support for the edition of routing points
+- [ADR-070] Add support for edge reconnection
 
 === Breaking changes
 

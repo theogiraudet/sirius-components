@@ -64,7 +64,7 @@ import {
   SourceElementAction,
   SprottySelectAction,
 } from './DiagramServer.types';
-import { ResizeAction, SiriusResizeCommand } from './resize/siriusResize';
+import { ResizeAction, SiriusResizeCommand } from './dragAndDrop/siriusResize';
 
 /** Action to delete a sprotty element */
 export const SPROTTY_DELETE_ACTION = 'sprottyDeleteElement';

@@ -58,7 +58,7 @@ import {
   Node,
   RectangularNodeStyle,
 } from './Diagram.types';
-import { resizeFeature } from './resize/model';
+import { resizeFeature } from './dragAndDrop/model';
 
 /**
  * Convert the given diagram object to a Sprotty diagram.

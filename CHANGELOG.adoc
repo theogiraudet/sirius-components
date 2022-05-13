@@ -14,6 +14,8 @@
 
 === Bug fixes
 
+- https://github.com/eclipse-sirius/sirius-components/issues/931[#931] [layout] When the delete tool of an edge is used, the position of other edges are not affected.
+
 === Improvements
 
 === New Features

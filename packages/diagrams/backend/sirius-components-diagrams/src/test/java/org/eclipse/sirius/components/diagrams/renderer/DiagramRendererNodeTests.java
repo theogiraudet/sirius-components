@@ -288,6 +288,7 @@ public class DiagramRendererNodeTests {
                 .viewCreationRequests(List.of())
                 .viewDeletionRequests(List.of())
                 .previousDiagram(previousDiagram)
+                .diagramEvent(Optional.empty())
                 .build();
         // @formatter:on
         Element element = new Element(DiagramComponent.class, props);

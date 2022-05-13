@@ -1,5 +1,21 @@
 = Changelog
 
+== v2022.11.0 (unrelease)
+
+=== Architectural decision records
+
+=== Breaking changes
+
+=== Dependency update
+
+=== Bug fixes
+
+- https://github.com/eclipse-sirius/sirius-components/issues/931[#931] [layout] When the delete tool of an edge is used, the position of other edges are not affected.
+
+=== Improvements
+
+=== New Features
+
 == v2022.9.0
 
 === Architectural decision records

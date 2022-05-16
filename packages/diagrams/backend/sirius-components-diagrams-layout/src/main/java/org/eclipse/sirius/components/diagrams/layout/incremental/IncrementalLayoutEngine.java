@@ -30,6 +30,8 @@ import org.eclipse.sirius.components.diagrams.Size;
 import org.eclipse.sirius.components.diagrams.events.DoublePositionEvent;
 import org.eclipse.sirius.components.diagrams.events.IDiagramEvent;
 import org.eclipse.sirius.components.diagrams.events.MoveEvent;
+import org.eclipse.sirius.components.diagrams.events.ReconnectEdgeEvent;
+import org.eclipse.sirius.components.diagrams.events.ReconnectEventKind;
 import org.eclipse.sirius.components.diagrams.events.ResizeEvent;
 import org.eclipse.sirius.components.diagrams.events.UpdateEdgeRoutingPointsEvent;
 import org.eclipse.sirius.components.diagrams.layout.ISiriusWebLayoutConfigurator;
@@ -416,6 +418,22 @@ public class IncrementalLayoutEngine {
                     Ratio edgeTargetAnchorRelativePosition = this.getPositionProportionOfEdgeEndAbsolutePosition(edge.getTarget(), doublePositionEvent.getTargetPosition());
                     edge.setSourceAnchorRelativePosition(edgeSourceAnchorRelativePosition);
                     edge.setTargetAnchorRelativePosition(edgeTargetAnchorRelativePosition);
+                });
+        // @formatter:on
+
+        // @formatter:off
+        optionalDiagramElementEvent.filter(ReconnectEdgeEvent.class::isInstance)
+                .map(ReconnectEdgeEvent.class::cast)
+                .filter(reconnectionEvent -> reconnectionEvent.getEdgeId().equals(edge.getId()))
+                .ifPresent(reconnectionEvent -> {
+                    if (reconnectionEvent.getKind() == ReconnectEventKind.SOURCE) {
+                        Ratio reconnectAnchor = this.getPositionProportionOfEdgeEndAbsolutePosition(edge.getSource(), reconnectionEvent.getNewEdgeEndAnchor());
+                        edge.setSourceAnchorRelativePosition(reconnectAnchor);
+                    }
+                    if (reconnectionEvent.getKind() == ReconnectEventKind.TARGET) {
+                        Ratio reconnectAnchor = this.getPositionProportionOfEdgeEndAbsolutePosition(edge.getTarget(), reconnectionEvent.getNewEdgeEndAnchor());
+                        edge.setTargetAnchorRelativePosition(reconnectAnchor);
+                    }
                 });
         // @formatter:on
 

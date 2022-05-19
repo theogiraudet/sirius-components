@@ -17,6 +17,6 @@ package org.eclipse.sirius.components.diagrams.events;
  *
  * @author gcoutable
  */
-public enum ReconnectEventKind {
+public enum ReconnectEdgeKind {
     SOURCE, TARGET
 }

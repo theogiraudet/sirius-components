@@ -31,7 +31,7 @@ import org.eclipse.sirius.components.diagrams.Position;
 import org.eclipse.sirius.components.diagrams.Ratio;
 import org.eclipse.sirius.components.diagrams.description.DiagramDescription;
 import org.eclipse.sirius.components.diagrams.events.ReconnectEdgeEvent;
-import org.eclipse.sirius.components.diagrams.events.ReconnectEventKind;
+import org.eclipse.sirius.components.diagrams.events.ReconnectEdgeKind;
 import org.eclipse.sirius.components.diagrams.layout.ELKLayoutedDiagramProvider;
 import org.eclipse.sirius.components.diagrams.layout.IELKDiagramConverter;
 import org.eclipse.sirius.components.diagrams.layout.LayoutConfiguratorRegistry;
@@ -132,7 +132,7 @@ public class ReconnectEdgeTests {
 
         Edge edge = diagram.getEdges().get(0);
         String edgeId = edge.getId();
-        ReconnectEdgeEvent reconnectEdgeEvent = new ReconnectEdgeEvent(ReconnectEventKind.TARGET, edgeId, thirdNode.get().getId(), Position.at(175, 200));
+        ReconnectEdgeEvent reconnectEdgeEvent = new ReconnectEdgeEvent(ReconnectEdgeKind.TARGET, edgeId, thirdNode.get().getId(), Position.at(175, 200));
 
         TestDiagramCreationService diagramCreationService = this.createDiagramCreationService(diagram);
         Optional<Diagram> optionalRefreshedDiagram = diagramCreationService.performRefresh(editingContext, diagram, reconnectEdgeEvent);
@@ -183,7 +183,7 @@ public class ReconnectEdgeTests {
 
         Edge edge = diagram.getEdges().get(0);
         String edgeId = edge.getId();
-        ReconnectEdgeEvent reconnectEdgeEvent = new ReconnectEdgeEvent(ReconnectEventKind.SOURCE, edgeId, thirdNode.get().getId(), Position.at(175, 200));
+        ReconnectEdgeEvent reconnectEdgeEvent = new ReconnectEdgeEvent(ReconnectEdgeKind.SOURCE, edgeId, thirdNode.get().getId(), Position.at(175, 200));
 
         TestDiagramCreationService diagramCreationService = this.createDiagramCreationService(diagram);
         Optional<Diagram> optionalRefreshedDiagram = diagramCreationService.performRefresh(editingContext, diagram, reconnectEdgeEvent);
@@ -256,7 +256,7 @@ public class ReconnectEdgeTests {
 
         Edge edgeToReconnect = diagram.getEdges().get(1);
         String edgeToReconnectId = edgeToReconnect.getId();
-        ReconnectEdgeEvent reconnectEdgeEvent = new ReconnectEdgeEvent(ReconnectEventKind.TARGET, edgeToReconnectId, thirdNode.get().getId(), Position.at(175, 175));
+        ReconnectEdgeEvent reconnectEdgeEvent = new ReconnectEdgeEvent(ReconnectEdgeKind.TARGET, edgeToReconnectId, thirdNode.get().getId(), Position.at(175, 175));
 
         TestDiagramCreationService diagramCreationService = this.createDiagramCreationService(diagram);
         Optional<Diagram> optionalRefreshedDiagram = diagramCreationService.performRefresh(editingContext, diagram, reconnectEdgeEvent);

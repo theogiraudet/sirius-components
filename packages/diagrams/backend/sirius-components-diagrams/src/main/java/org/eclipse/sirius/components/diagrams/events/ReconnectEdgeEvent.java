@@ -25,20 +25,20 @@ public class ReconnectEdgeEvent implements IDiagramEvent {
 
     private String edgeId;
 
-    private final ReconnectEventKind kind;
+    private final ReconnectEdgeKind kind;
 
     private final String newEdgeEndId;
 
     private final Position newEdgeEndAnchor;
 
-    public ReconnectEdgeEvent(ReconnectEventKind kind, String previousEdgeId, String newEdgeEndId, Position newEdgeEndAnchor) {
+    public ReconnectEdgeEvent(ReconnectEdgeKind kind, String previousEdgeId, String newEdgeEndId, Position newEdgeEndAnchor) {
         this.kind = Objects.requireNonNull(kind);
         this.edgeId = Objects.requireNonNull(previousEdgeId);
         this.newEdgeEndId = Objects.requireNonNull(newEdgeEndId);
         this.newEdgeEndAnchor = Objects.requireNonNull(newEdgeEndAnchor);
     }
 
-    public ReconnectEventKind getKind() {
+    public ReconnectEdgeKind getKind() {
         return this.kind;
     }
 

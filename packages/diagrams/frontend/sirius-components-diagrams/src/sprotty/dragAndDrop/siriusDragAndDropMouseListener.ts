@@ -32,6 +32,7 @@ import {
 } from 'sprotty';
 import { Action, Dimension, Point } from 'sprotty-protocol';
 import { Bounds } from 'sprotty-protocol/';
+import { SiriusReconnectAction } from '../edgeEdition/model';
 import { snapToRectangle } from '../utils/geometry';
 import { RectangleSide } from '../utils/geometry.types';
 import { ElementResize, ResizeAction } from './siriusResize';
@@ -124,14 +125,18 @@ export class SiriusDragAndDropMouseListener extends MoveMouseListener {
                 .reverse()
                 .find((e) => isConnectable(e) && e.canConnect(parent, element.kind as 'source' | 'target'));
               if (newEnd && this.hasDragged) {
-                result.push(
-                  ReconnectAction.create({
+                if (element.kind === 'source' || element.kind === 'target') {
+                  const action: SiriusReconnectAction = {
+                    kind: ReconnectAction.KIND,
                     routableId: element.parent.id,
                     newSourceId: element.kind === 'source' ? newEnd.id : parent.sourceId,
                     newTargetId: element.kind === 'target' ? newEnd.id : parent.targetId,
-                  })
-                );
-                hasReconnected = true;
+                    newEndPosition: { x: handlePosAbs.x, y: handlePosAbs.y },
+                    reconnectKind: element.kind,
+                  };
+                  result.push(action);
+                  hasReconnected = true;
+                }
               }
             }
           }

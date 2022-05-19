@@ -37,7 +37,7 @@ import org.eclipse.sirius.components.diagrams.elements.EdgeElementProps.Builder;
 import org.eclipse.sirius.components.diagrams.elements.NodeElementProps;
 import org.eclipse.sirius.components.diagrams.events.IDiagramEvent;
 import org.eclipse.sirius.components.diagrams.events.ReconnectEdgeEvent;
-import org.eclipse.sirius.components.diagrams.events.ReconnectEventKind;
+import org.eclipse.sirius.components.diagrams.events.ReconnectEdgeKind;
 import org.eclipse.sirius.components.diagrams.events.RemoveEdgeEvent;
 import org.eclipse.sirius.components.diagrams.renderer.DiagramRenderingCache;
 import org.eclipse.sirius.components.representations.Element;
@@ -130,14 +130,10 @@ public class EdgeComponent implements IComponent {
                         Ratio targetAnchorRelativePosition = optionalPreviousEdge.map(Edge::getTargetAnchorRelativePosition).orElse(Ratio.UNDEFINED);
                         edgeElementPropsBuilder.sourceAnchorRelativePosition(sourceAnchorRelativePosition);
                         edgeElementPropsBuilder.targetAnchorRelativePosition(targetAnchorRelativePosition);
-                    }
-
-                    if (optionalDiagramEvent.isPresent() && optionalDiagramEvent.get() instanceof ReconnectEdgeEvent) {
+                    } else if (optionalDiagramEvent.isPresent() && optionalDiagramEvent.get() instanceof ReconnectEdgeEvent) {
                         ReconnectEdgeEvent reconnectEdgeEvent = (ReconnectEdgeEvent) optionalDiagramEvent.get();
                         optionalPreviousEdge = this.getPreviousEdge(id, lastPreviousRenderedEdgeIds, reconnectEdgeEvent, edgeIdProvider, count, optionalPreviousEdge, edgeElementPropsBuilder);
-                    }
-
-                    if (optionalDiagramEvent.isEmpty()) {
+                    } else {
                         Ratio sourceAnchorRelativePosition = optionalPreviousEdge.map(Edge::getSourceAnchorRelativePosition).orElse(Ratio.UNDEFINED);
                         Ratio targetAnchorRelativePosition = optionalPreviousEdge.map(Edge::getTargetAnchorRelativePosition).orElse(Ratio.UNDEFINED);
                         edgeElementPropsBuilder.sourceAnchorRelativePosition(sourceAnchorRelativePosition);
@@ -238,12 +234,12 @@ public class EdgeComponent implements IComponent {
 
             // We have the previous edge, but whether the reconnection concern the edge source or the
             // edge target we must reset the anchor to makes it computed by the layout service.
-            if (ReconnectEventKind.SOURCE.equals(reconnectEdgeEvent.getKind())) {
+            if (ReconnectEdgeKind.SOURCE.equals(reconnectEdgeEvent.getKind())) {
                 // We are reconnecting the source of the edge, thus, the source anchor should be reset
                 sourceAnchorRelativePosition = Ratio.UNDEFINED;
             }
 
-            if (ReconnectEventKind.TARGET.equals(reconnectEdgeEvent.getKind())) {
+            if (ReconnectEdgeKind.TARGET.equals(reconnectEdgeEvent.getKind())) {
                 // We are reconnecting the source of the edge, thus, the target anchor should be reset
                 targetAnchorRelativePosition = Ratio.UNDEFINED;
             }

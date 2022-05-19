@@ -31,7 +31,7 @@ import org.eclipse.sirius.components.diagrams.events.DoublePositionEvent;
 import org.eclipse.sirius.components.diagrams.events.IDiagramEvent;
 import org.eclipse.sirius.components.diagrams.events.MoveEvent;
 import org.eclipse.sirius.components.diagrams.events.ReconnectEdgeEvent;
-import org.eclipse.sirius.components.diagrams.events.ReconnectEventKind;
+import org.eclipse.sirius.components.diagrams.events.ReconnectEdgeKind;
 import org.eclipse.sirius.components.diagrams.events.ResizeEvent;
 import org.eclipse.sirius.components.diagrams.events.UpdateEdgeRoutingPointsEvent;
 import org.eclipse.sirius.components.diagrams.layout.ISiriusWebLayoutConfigurator;
@@ -139,8 +139,19 @@ public class IncrementalLayoutEngine {
         shouldLayoutEdge = shouldLayoutEdge || !this.isLabelPositioned(edge);
         shouldLayoutEdge = shouldLayoutEdge || this.hasRoutingPointsToUpdate(optionalDiagramElementEvent, edge);
         shouldLayoutEdge = shouldLayoutEdge || !this.isEdgePositioned(edge);
+        shouldLayoutEdge = shouldLayoutEdge || this.isReconnectedEdge(optionalDiagramElementEvent, edge);
 
         return shouldLayoutEdge;
+    }
+
+    private boolean isReconnectedEdge(Optional<IDiagramEvent> optionalDiagramElementEvent, EdgeLayoutData edge) {
+        // @formatter:off
+        return optionalDiagramElementEvent.filter(ReconnectEdgeEvent.class::isInstance)
+                .map(ReconnectEdgeEvent.class::cast)
+                .map(ReconnectEdgeEvent::getEdgeId)
+                .filter(edge.getId()::equals)
+                .isPresent();
+        // @formatter:on
     }
 
     /**
@@ -426,11 +437,11 @@ public class IncrementalLayoutEngine {
                 .map(ReconnectEdgeEvent.class::cast)
                 .filter(reconnectionEvent -> reconnectionEvent.getEdgeId().equals(edge.getId()))
                 .ifPresent(reconnectionEvent -> {
-                    if (reconnectionEvent.getKind() == ReconnectEventKind.SOURCE) {
+                    if (reconnectionEvent.getKind() == ReconnectEdgeKind.SOURCE) {
                         Ratio reconnectAnchor = this.getPositionProportionOfEdgeEndAbsolutePosition(edge.getSource(), reconnectionEvent.getNewEdgeEndAnchor());
                         edge.setSourceAnchorRelativePosition(reconnectAnchor);
                     }
-                    if (reconnectionEvent.getKind() == ReconnectEventKind.TARGET) {
+                    if (reconnectionEvent.getKind() == ReconnectEdgeKind.TARGET) {
                         Ratio reconnectAnchor = this.getPositionProportionOfEdgeEndAbsolutePosition(edge.getTarget(), reconnectionEvent.getNewEdgeEndAnchor());
                         edge.setTargetAnchorRelativePosition(reconnectAnchor);
                     }

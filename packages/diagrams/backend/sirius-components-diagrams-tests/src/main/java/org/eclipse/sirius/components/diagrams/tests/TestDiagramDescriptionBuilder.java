@@ -51,6 +51,7 @@ public class TestDiagramDescriptionBuilder {
             .nodeDescriptions(nodeDescriptions)
             .edgeDescriptions(edgeDescriptions)
             .toolSections(toolSections)
+            .tools(List.of())
             .dropHandler(variableManager -> new Failure("")) //$NON-NLS-1$
             .build();
         // @formatter:on

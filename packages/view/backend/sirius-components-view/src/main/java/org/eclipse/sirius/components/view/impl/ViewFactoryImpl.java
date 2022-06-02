@@ -73,7 +73,9 @@ import org.eclipse.sirius.components.view.RadioDescriptionStyle;
 import org.eclipse.sirius.components.view.SelectDescription;
 import org.eclipse.sirius.components.view.SelectDescriptionStyle;
 import org.eclipse.sirius.components.view.SetValue;
+import org.eclipse.sirius.components.view.SourceEdgeEndReconnectionTool;
 import org.eclipse.sirius.components.view.SynchronizationPolicy;
+import org.eclipse.sirius.components.view.TargetEdgeEndReconnectionTool;
 import org.eclipse.sirius.components.view.TextAreaDescription;
 import org.eclipse.sirius.components.view.TextareaDescriptionStyle;
 import org.eclipse.sirius.components.view.TextfieldDescription;
@@ -143,6 +145,10 @@ public class ViewFactoryImpl extends EFactoryImpl implements ViewFactory {
             return this.createNodeTool();
         case ViewPackage.EDGE_TOOL:
             return this.createEdgeTool();
+        case ViewPackage.SOURCE_EDGE_END_RECONNECTION_TOOL:
+            return this.createSourceEdgeEndReconnectionTool();
+        case ViewPackage.TARGET_EDGE_END_RECONNECTION_TOOL:
+            return this.createTargetEdgeEndReconnectionTool();
         case ViewPackage.DROP_TOOL:
             return this.createDropTool();
         case ViewPackage.CHANGE_CONTEXT:
@@ -394,6 +400,28 @@ public class ViewFactoryImpl extends EFactoryImpl implements ViewFactory {
     public EdgeTool createEdgeTool() {
         EdgeToolImpl edgeTool = new EdgeToolImpl();
         return edgeTool;
+    }
+
+    /**
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     *
+     * @generated
+     */
+    @Override
+    public SourceEdgeEndReconnectionTool createSourceEdgeEndReconnectionTool() {
+        SourceEdgeEndReconnectionToolImpl sourceEdgeEndReconnectionTool = new SourceEdgeEndReconnectionToolImpl();
+        return sourceEdgeEndReconnectionTool;
+    }
+
+    /**
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     *
+     * @generated
+     */
+    @Override
+    public TargetEdgeEndReconnectionTool createTargetEdgeEndReconnectionTool() {
+        TargetEdgeEndReconnectionToolImpl targetEdgeEndReconnectionTool = new TargetEdgeEndReconnectionToolImpl();
+        return targetEdgeEndReconnectionTool;
     }
 
     /**

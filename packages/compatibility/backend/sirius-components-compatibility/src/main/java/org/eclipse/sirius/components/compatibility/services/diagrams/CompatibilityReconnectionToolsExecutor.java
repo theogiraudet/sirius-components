@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.sirius.components.compatibility.services.diagrams;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
@@ -27,6 +28,7 @@ import org.eclipse.sirius.components.compatibility.api.IAQLInterpreterFactory;
 import org.eclipse.sirius.components.compatibility.api.IIdentifierProvider;
 import org.eclipse.sirius.components.compatibility.api.IModelOperationHandler;
 import org.eclipse.sirius.components.compatibility.api.IModelOperationHandlerSwitchProvider;
+import org.eclipse.sirius.components.compatibility.messages.ICompatibilityMessageService;
 import org.eclipse.sirius.components.compatibility.services.api.IODesignRegistry;
 import org.eclipse.sirius.components.core.api.Environment;
 import org.eclipse.sirius.components.diagrams.Edge;
@@ -62,12 +64,15 @@ public class CompatibilityReconnectionToolsExecutor implements IReconnectionTool
 
     private final IModelOperationHandlerSwitchProvider modelOperationHandlerSwitchProvider;
 
+    private final ICompatibilityMessageService compatibilityMessageService;
+
     public CompatibilityReconnectionToolsExecutor(IIdentifierProvider identifierProvider, IODesignRegistry odesignRegistry, IAQLInterpreterFactory interpreterFactory,
-            IModelOperationHandlerSwitchProvider modelOperationHandlerSwitchProvider) {
+            IModelOperationHandlerSwitchProvider modelOperationHandlerSwitchProvider, ICompatibilityMessageService compatibilityMessageService) {
         this.identifierProvider = Objects.requireNonNull(identifierProvider);
         this.odesignRegistry = Objects.requireNonNull(odesignRegistry);
         this.interpreterFactory = Objects.requireNonNull(interpreterFactory);
         this.modelOperationHandlerSwitchProvider = Objects.requireNonNull(modelOperationHandlerSwitchProvider);
+        this.compatibilityMessageService = Objects.requireNonNull(compatibilityMessageService);
     }
 
     @Override
@@ -78,7 +83,7 @@ public class CompatibilityReconnectionToolsExecutor implements IReconnectionTool
     @Override
     public IStatus execute(ReconnectionToolInterpreterData toolInterpreterData, Edge edge, EdgeDescription edgeDescription, ReconnectEdgeKind reconnectEdgeKind,
             DiagramDescription diagramDescription) {
-        IStatus status = new Failure(""); //$NON-NLS-1$
+        IStatus status = new Failure(this.compatibilityMessageService.noReconnectionToolDefined());
 
         var optionalSiriusDiagramDescription = this.identifierProvider.findVsmElementId(diagramDescription.getId()).flatMap(this::getSiriusDiagramDescription);
 
@@ -88,18 +93,31 @@ public class CompatibilityReconnectionToolsExecutor implements IReconnectionTool
             VariableManager variableManager = this.createVariableManager(toolInterpreterData);
 
             // @formatter:off
-            status = this.identifierProvider.findVsmElementId(edgeDescription.getId().toString())
-                    .flatMap(this::getEdgeMapping)
-                    .map(EdgeMapping::getReconnections)
-                    .orElseGet(BasicEList::new)
-                    .stream()
-                    .filter(reconnectEdgeDescription -> this.isKindOf(reconnectEdgeDescription.getReconnectionKind(), reconnectEdgeKind))
-                    .filter(reconnectEdgeDescription -> this.canReconnect(variableManager, reconnectEdgeDescription, interpreter))
-                    .findFirst()
-                    .map(ReconnectEdgeDescription::getInitialOperation)
-                    .map(initialOperation -> this.executeReconnectionTool(initialOperation, interpreter, variableManager))
-                    .orElse(new Failure("")); //$NON-NLS-1$
+            List<ReconnectEdgeDescription> reconnectEdgeDescriptions = this.identifierProvider.findVsmElementId(edgeDescription.getId().toString())
+                .flatMap(this::getEdgeMapping)
+                .map(EdgeMapping::getReconnections)
+                .orElseGet(BasicEList::new);
             // @formatter:on
+
+            if (!reconnectEdgeDescriptions.isEmpty()) {
+                // @formatter:off
+                Optional<ReconnectEdgeDescription> optionalReconnectEdgeDescription = reconnectEdgeDescriptions.stream()
+                        .filter(reconnectEdgeDescription -> this.isKindOf(reconnectEdgeDescription.getReconnectionKind(), reconnectEdgeKind))
+                        .filter(reconnectEdgeDescription -> this.canReconnect(variableManager, reconnectEdgeDescription, interpreter))
+                        .findFirst();
+                // @formatter:on
+
+                if (optionalReconnectEdgeDescription.isPresent()) {
+                    // @formatter:off
+                    status = optionalReconnectEdgeDescription.map(ReconnectEdgeDescription::getInitialOperation)
+                        .map(initialOperation -> this.executeReconnectionTool(initialOperation, interpreter, variableManager))
+                        .orElse(new Failure(this.compatibilityMessageService.toolExecutionError()));
+                    // @formatter:on
+                } else {
+                    status = new Failure(this.compatibilityMessageService.reconnectionToolCannotBeHandled());
+                }
+
+            }
         }
 
         return status;

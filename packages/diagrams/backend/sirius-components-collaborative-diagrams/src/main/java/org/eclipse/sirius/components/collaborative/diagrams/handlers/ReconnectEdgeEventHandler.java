@@ -21,6 +21,7 @@ import java.util.Optional;
 import org.eclipse.sirius.components.collaborative.api.ChangeDescription;
 import org.eclipse.sirius.components.collaborative.api.ChangeKind;
 import org.eclipse.sirius.components.collaborative.api.Monitoring;
+import org.eclipse.sirius.components.collaborative.diagrams.DiagramChangeKind;
 import org.eclipse.sirius.components.collaborative.diagrams.api.IDiagramContext;
 import org.eclipse.sirius.components.collaborative.diagrams.api.IDiagramDescriptionService;
 import org.eclipse.sirius.components.collaborative.diagrams.api.IDiagramEventHandler;
@@ -127,6 +128,9 @@ public class ReconnectEdgeEventHandler implements IDiagramEventHandler {
             } else {
                 String failureMessage = ((Failure) status).getMessage();
                 payload = new ErrorPayload(reconnectEdgeInput.getId(), failureMessage);
+                // The frontend action has been send, thus, the edge has been reconnected on he frontend. We need to
+                // force the backend to send the refreshed diagram to "undo" the reconnect.
+                changeDescription = new ChangeDescription(DiagramChangeKind.DIAGRAM_LAYOUT_CHANGE, reconnectEdgeInput.getRepresentationId(), reconnectEdgeInput);
             }
         }
 
@@ -175,6 +179,11 @@ public class ReconnectEdgeEventHandler implements IDiagramEventHandler {
             canExecuteReconnectTool = canExecuteReconnectTool && optionalPreviousSemanticEdgeEnd.isPresent();
             canExecuteReconnectTool = canExecuteReconnectTool && optionalNewSemanticEdgeEnd.isPresent();
             canExecuteReconnectTool = canExecuteReconnectTool && optionalOtherEdgeEnd.isPresent();
+
+            if (canExecuteReconnectTool && reconnectEdgeInput.getNewEdgeEndId().equals(optionalPreviousEdgeEnd.get().getId())) {
+                canExecuteReconnectTool = false;
+                status = new Failure(this.messageService.reconnectEdgeSameEdgeEnd());
+            }
 
             if (canExecuteReconnectTool) {
                 IReconnectionToolsExecutor reconnectionToolsExecutor = optionalReconnectionToolExecutor.get();

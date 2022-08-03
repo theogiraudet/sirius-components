@@ -21,22 +21,22 @@ import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-import org.eclipse.sirius.components.view.EdgeStyle;
+import org.eclipse.sirius.components.view.RectangularNodeStyleDescription;
 import org.eclipse.sirius.components.view.ViewPackage;
 
 /**
- * This is the item provider adapter for a {@link org.eclipse.sirius.components.view.EdgeStyle} object. <!--
- * begin-user-doc --> <!-- end-user-doc -->
+ * This is the item provider adapter for a {@link org.eclipse.sirius.components.view.RectangularNodeStyleDescription}
+ * object. <!-- begin-user-doc --> <!-- end-user-doc -->
  *
  * @generated
  */
-public class EdgeStyleItemProvider extends StyleItemProvider {
+public class RectangularNodeStyleDescriptionItemProvider extends StyleItemProvider {
     /**
      * This constructs an instance from a factory and a notifier. <!-- begin-user-doc --> <!-- end-user-doc -->
      *
      * @generated
      */
-    public EdgeStyleItemProvider(AdapterFactory adapterFactory) {
+    public RectangularNodeStyleDescriptionItemProvider(AdapterFactory adapterFactory) {
         super(adapterFactory);
     }
 
@@ -55,11 +55,14 @@ public class EdgeStyleItemProvider extends StyleItemProvider {
             this.addBoldPropertyDescriptor(object);
             this.addUnderlinePropertyDescriptor(object);
             this.addStrikeThroughPropertyDescriptor(object);
-            this.addLineStylePropertyDescriptor(object);
-            this.addSourceArrowStylePropertyDescriptor(object);
-            this.addTargetArrowStylePropertyDescriptor(object);
-            this.addEdgeWidthPropertyDescriptor(object);
+            this.addBorderColorPropertyDescriptor(object);
+            this.addBorderRadiusPropertyDescriptor(object);
+            this.addBorderSizePropertyDescriptor(object);
+            this.addBorderLineStylePropertyDescriptor(object);
+            this.addLabelColorPropertyDescriptor(object);
+            this.addSizeComputationExpressionPropertyDescriptor(object);
             this.addShowIconPropertyDescriptor(object);
+            this.addWithHeaderPropertyDescriptor(object);
         }
         return this.itemPropertyDescriptors;
     }
@@ -125,51 +128,76 @@ public class EdgeStyleItemProvider extends StyleItemProvider {
     }
 
     /**
-     * This adds a property descriptor for the Line Style feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * This adds a property descriptor for the Border Color feature. <!-- begin-user-doc --> <!-- end-user-doc -->
      *
      * @generated
      */
-    protected void addLineStylePropertyDescriptor(Object object) {
+    protected void addBorderColorPropertyDescriptor(Object object) {
         this.itemPropertyDescriptors.add(this.createItemPropertyDescriptor(((ComposeableAdapterFactory) this.adapterFactory).getRootAdapterFactory(), this.getResourceLocator(),
-                this.getString("_UI_EdgeStyle_lineStyle_feature"), //$NON-NLS-1$
-                this.getString("_UI_PropertyDescriptor_description", "_UI_EdgeStyle_lineStyle_feature", "_UI_EdgeStyle_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-                ViewPackage.Literals.EDGE_STYLE__LINE_STYLE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+                this.getString("_UI_BorderStyle_borderColor_feature"), //$NON-NLS-1$
+                this.getString("_UI_PropertyDescriptor_description", "_UI_BorderStyle_borderColor_feature", "_UI_BorderStyle_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                ViewPackage.Literals.BORDER_STYLE__BORDER_COLOR, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
     }
 
     /**
-     * This adds a property descriptor for the Source Arrow Style feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * This adds a property descriptor for the Border Radius feature. <!-- begin-user-doc --> <!-- end-user-doc -->
      *
      * @generated
      */
-    protected void addSourceArrowStylePropertyDescriptor(Object object) {
+    protected void addBorderRadiusPropertyDescriptor(Object object) {
         this.itemPropertyDescriptors.add(this.createItemPropertyDescriptor(((ComposeableAdapterFactory) this.adapterFactory).getRootAdapterFactory(), this.getResourceLocator(),
-                this.getString("_UI_EdgeStyle_sourceArrowStyle_feature"), //$NON-NLS-1$
-                this.getString("_UI_PropertyDescriptor_description", "_UI_EdgeStyle_sourceArrowStyle_feature", "_UI_EdgeStyle_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-                ViewPackage.Literals.EDGE_STYLE__SOURCE_ARROW_STYLE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+                this.getString("_UI_BorderStyle_borderRadius_feature"), //$NON-NLS-1$
+                this.getString("_UI_PropertyDescriptor_description", "_UI_BorderStyle_borderRadius_feature", "_UI_BorderStyle_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                ViewPackage.Literals.BORDER_STYLE__BORDER_RADIUS, true, false, false, ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null, null));
     }
 
     /**
-     * This adds a property descriptor for the Target Arrow Style feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * This adds a property descriptor for the Border Size feature. <!-- begin-user-doc --> <!-- end-user-doc -->
      *
      * @generated
      */
-    protected void addTargetArrowStylePropertyDescriptor(Object object) {
+    protected void addBorderSizePropertyDescriptor(Object object) {
         this.itemPropertyDescriptors.add(this.createItemPropertyDescriptor(((ComposeableAdapterFactory) this.adapterFactory).getRootAdapterFactory(), this.getResourceLocator(),
-                this.getString("_UI_EdgeStyle_targetArrowStyle_feature"), //$NON-NLS-1$
-                this.getString("_UI_PropertyDescriptor_description", "_UI_EdgeStyle_targetArrowStyle_feature", "_UI_EdgeStyle_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-                ViewPackage.Literals.EDGE_STYLE__TARGET_ARROW_STYLE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+                this.getString("_UI_BorderStyle_borderSize_feature"), //$NON-NLS-1$
+                this.getString("_UI_PropertyDescriptor_description", "_UI_BorderStyle_borderSize_feature", "_UI_BorderStyle_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                ViewPackage.Literals.BORDER_STYLE__BORDER_SIZE, true, false, false, ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null, null));
     }
 
     /**
-     * This adds a property descriptor for the Edge Width feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * This adds a property descriptor for the Border Line Style feature. <!-- begin-user-doc --> <!-- end-user-doc -->
      *
      * @generated
      */
-    protected void addEdgeWidthPropertyDescriptor(Object object) {
+    protected void addBorderLineStylePropertyDescriptor(Object object) {
         this.itemPropertyDescriptors.add(this.createItemPropertyDescriptor(((ComposeableAdapterFactory) this.adapterFactory).getRootAdapterFactory(), this.getResourceLocator(),
-                this.getString("_UI_EdgeStyle_edgeWidth_feature"), //$NON-NLS-1$
-                this.getString("_UI_PropertyDescriptor_description", "_UI_EdgeStyle_edgeWidth_feature", "_UI_EdgeStyle_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-                ViewPackage.Literals.EDGE_STYLE__EDGE_WIDTH, true, false, false, ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null, null));
+                this.getString("_UI_BorderStyle_borderLineStyle_feature"), //$NON-NLS-1$
+                this.getString("_UI_PropertyDescriptor_description", "_UI_BorderStyle_borderLineStyle_feature", "_UI_BorderStyle_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                ViewPackage.Literals.BORDER_STYLE__BORDER_LINE_STYLE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+    }
+
+    /**
+     * This adds a property descriptor for the Label Color feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+     *
+     * @generated
+     */
+    protected void addLabelColorPropertyDescriptor(Object object) {
+        this.itemPropertyDescriptors.add(this.createItemPropertyDescriptor(((ComposeableAdapterFactory) this.adapterFactory).getRootAdapterFactory(), this.getResourceLocator(),
+                this.getString("_UI_NodeStyleDescription_labelColor_feature"), //$NON-NLS-1$
+                this.getString("_UI_PropertyDescriptor_description", "_UI_NodeStyleDescription_labelColor_feature", "_UI_NodeStyleDescription_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                ViewPackage.Literals.NODE_STYLE_DESCRIPTION__LABEL_COLOR, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+    }
+
+    /**
+     * This adds a property descriptor for the Size Computation Expression feature. <!-- begin-user-doc --> <!--
+     * end-user-doc -->
+     *
+     * @generated
+     */
+    protected void addSizeComputationExpressionPropertyDescriptor(Object object) {
+        this.itemPropertyDescriptors.add(this.createItemPropertyDescriptor(((ComposeableAdapterFactory) this.adapterFactory).getRootAdapterFactory(), this.getResourceLocator(),
+                this.getString("_UI_NodeStyleDescription_sizeComputationExpression_feature"), //$NON-NLS-1$
+                this.getString("_UI_PropertyDescriptor_description", "_UI_NodeStyleDescription_sizeComputationExpression_feature", "_UI_NodeStyleDescription_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                ViewPackage.Literals.NODE_STYLE_DESCRIPTION__SIZE_COMPUTATION_EXPRESSION, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
     }
 
     /**
@@ -179,13 +207,25 @@ public class EdgeStyleItemProvider extends StyleItemProvider {
      */
     protected void addShowIconPropertyDescriptor(Object object) {
         this.itemPropertyDescriptors.add(this.createItemPropertyDescriptor(((ComposeableAdapterFactory) this.adapterFactory).getRootAdapterFactory(), this.getResourceLocator(),
-                this.getString("_UI_EdgeStyle_showIcon_feature"), //$NON-NLS-1$
-                this.getString("_UI_PropertyDescriptor_description", "_UI_EdgeStyle_showIcon_feature", "_UI_EdgeStyle_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-                ViewPackage.Literals.EDGE_STYLE__SHOW_ICON, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+                this.getString("_UI_NodeStyleDescription_showIcon_feature"), //$NON-NLS-1$
+                this.getString("_UI_PropertyDescriptor_description", "_UI_NodeStyleDescription_showIcon_feature", "_UI_NodeStyleDescription_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                ViewPackage.Literals.NODE_STYLE_DESCRIPTION__SHOW_ICON, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
     }
 
     /**
-     * This returns EdgeStyle.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * This adds a property descriptor for the With Header feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+     *
+     * @generated
+     */
+    protected void addWithHeaderPropertyDescriptor(Object object) {
+        this.itemPropertyDescriptors.add(this.createItemPropertyDescriptor(((ComposeableAdapterFactory) this.adapterFactory).getRootAdapterFactory(), this.getResourceLocator(),
+                this.getString("_UI_RectangularNodeStyleDescription_withHeader_feature"), //$NON-NLS-1$
+                this.getString("_UI_PropertyDescriptor_description", "_UI_RectangularNodeStyleDescription_withHeader_feature", "_UI_RectangularNodeStyleDescription_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                ViewPackage.Literals.RECTANGULAR_NODE_STYLE_DESCRIPTION__WITH_HEADER, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+    }
+
+    /**
+     * This returns RectangularNodeStyleDescription.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
      *
      * @generated NOT
      */
@@ -211,9 +251,9 @@ public class EdgeStyleItemProvider extends StyleItemProvider {
      */
     @Override
     public String getText(Object object) {
-        String label = ((EdgeStyle) object).getColor();
-        return label == null || label.length() == 0 ? this.getString("_UI_EdgeStyle_type") : //$NON-NLS-1$
-                this.getString("_UI_EdgeStyle_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+        String label = ((RectangularNodeStyleDescription) object).getColor();
+        return label == null || label.length() == 0 ? this.getString("_UI_RectangularNodeStyleDescription_type") : //$NON-NLS-1$
+                this.getString("_UI_RectangularNodeStyleDescription_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     /**
@@ -227,17 +267,20 @@ public class EdgeStyleItemProvider extends StyleItemProvider {
     public void notifyChanged(Notification notification) {
         this.updateChildren(notification);
 
-        switch (notification.getFeatureID(EdgeStyle.class)) {
-        case ViewPackage.EDGE_STYLE__FONT_SIZE:
-        case ViewPackage.EDGE_STYLE__ITALIC:
-        case ViewPackage.EDGE_STYLE__BOLD:
-        case ViewPackage.EDGE_STYLE__UNDERLINE:
-        case ViewPackage.EDGE_STYLE__STRIKE_THROUGH:
-        case ViewPackage.EDGE_STYLE__LINE_STYLE:
-        case ViewPackage.EDGE_STYLE__SOURCE_ARROW_STYLE:
-        case ViewPackage.EDGE_STYLE__TARGET_ARROW_STYLE:
-        case ViewPackage.EDGE_STYLE__EDGE_WIDTH:
-        case ViewPackage.EDGE_STYLE__SHOW_ICON:
+        switch (notification.getFeatureID(RectangularNodeStyleDescription.class)) {
+        case ViewPackage.RECTANGULAR_NODE_STYLE_DESCRIPTION__FONT_SIZE:
+        case ViewPackage.RECTANGULAR_NODE_STYLE_DESCRIPTION__ITALIC:
+        case ViewPackage.RECTANGULAR_NODE_STYLE_DESCRIPTION__BOLD:
+        case ViewPackage.RECTANGULAR_NODE_STYLE_DESCRIPTION__UNDERLINE:
+        case ViewPackage.RECTANGULAR_NODE_STYLE_DESCRIPTION__STRIKE_THROUGH:
+        case ViewPackage.RECTANGULAR_NODE_STYLE_DESCRIPTION__BORDER_COLOR:
+        case ViewPackage.RECTANGULAR_NODE_STYLE_DESCRIPTION__BORDER_RADIUS:
+        case ViewPackage.RECTANGULAR_NODE_STYLE_DESCRIPTION__BORDER_SIZE:
+        case ViewPackage.RECTANGULAR_NODE_STYLE_DESCRIPTION__BORDER_LINE_STYLE:
+        case ViewPackage.RECTANGULAR_NODE_STYLE_DESCRIPTION__LABEL_COLOR:
+        case ViewPackage.RECTANGULAR_NODE_STYLE_DESCRIPTION__SIZE_COMPUTATION_EXPRESSION:
+        case ViewPackage.RECTANGULAR_NODE_STYLE_DESCRIPTION__SHOW_ICON:
+        case ViewPackage.RECTANGULAR_NODE_STYLE_DESCRIPTION__WITH_HEADER:
             this.fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
             return;
         }

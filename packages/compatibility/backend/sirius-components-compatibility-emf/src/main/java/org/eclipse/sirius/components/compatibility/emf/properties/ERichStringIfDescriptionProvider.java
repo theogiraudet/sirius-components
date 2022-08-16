@@ -25,7 +25,7 @@ import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.sirius.components.compatibility.emf.properties.api.IPropertiesValidationProvider;
 import org.eclipse.sirius.components.compatibility.forms.WidgetIdProvider;
 import org.eclipse.sirius.components.forms.description.IfDescription;
-import org.eclipse.sirius.components.forms.description.TextareaDescription;
+import org.eclipse.sirius.components.forms.description.RichTextDescription;
 import org.eclipse.sirius.components.representations.Failure;
 import org.eclipse.sirius.components.representations.IStatus;
 import org.eclipse.sirius.components.representations.Success;
@@ -36,16 +36,16 @@ import org.eclipse.sirius.components.representations.VariableManager;
  *
  * @author sbegaudeau
  */
-public class EStringIfDescriptionProvider {
-    private static final String IF_DESCRIPTION_ID = "EString"; //$NON-NLS-1$
+public class ERichStringIfDescriptionProvider {
+    private static final String IF_DESCRIPTION_ID = "ERichString"; //$NON-NLS-1$
 
-    private static final String TEXTAREA_DESCRIPTION_ID = "Textarea"; //$NON-NLS-1$
+    private static final String RICHTEXT_DESCRIPTION_ID = "RichText"; //$NON-NLS-1$
 
     private final ComposedAdapterFactory composedAdapterFactory;
 
     private final IPropertiesValidationProvider propertiesValidationProvider;
 
-    public EStringIfDescriptionProvider(ComposedAdapterFactory composedAdapterFactory, IPropertiesValidationProvider propertiesValidationProvider) {
+    public ERichStringIfDescriptionProvider(ComposedAdapterFactory composedAdapterFactory, IPropertiesValidationProvider propertiesValidationProvider) {
         this.composedAdapterFactory = Objects.requireNonNull(composedAdapterFactory);
         this.propertiesValidationProvider = Objects.requireNonNull(propertiesValidationProvider);
     }
@@ -54,7 +54,7 @@ public class EStringIfDescriptionProvider {
         // @formatter:off
         return IfDescription.newIfDescription(IF_DESCRIPTION_ID)
                 .predicate(this.getPredicate())
-                .widgetDescription(this.getTextareaDescription())
+                .widgetDescription(this.getRichTextDescription())
                 .build();
         // @formatter:on
     }
@@ -64,14 +64,14 @@ public class EStringIfDescriptionProvider {
             var optionalEAttribute = variableManager.get(PropertiesDefaultDescriptionProvider.ESTRUCTURAL_FEATURE, EAttribute.class);
             return optionalEAttribute.filter(eAttribute -> {
                 EClassifier eType = eAttribute.getEType();
-                return !eAttribute.getName().toLowerCase().contains("rich") && (eType.equals(EcorePackage.Literals.ESTRING) || Objects.equals(eType.getInstanceClassName(), String.class.getName())); //$NON-NLS-1$
+                return eAttribute.getName().toLowerCase().contains("rich") && (eType.equals(EcorePackage.Literals.ESTRING) || Objects.equals(eType.getInstanceClassName(), String.class.getName())); //$NON-NLS-1$
             }).isPresent();
         };
     }
 
-    private TextareaDescription getTextareaDescription() {
+    private RichTextDescription getRichTextDescription() {
         // @formatter:off
-        return TextareaDescription.newTextareaDescription(TEXTAREA_DESCRIPTION_ID)
+        return RichTextDescription.newRichTextDescription(RICHTEXT_DESCRIPTION_ID)
                 .idProvider(new WidgetIdProvider())
                 .labelProvider(this.getLabelProvider())
                 .valueProvider(this.getValueProvider())

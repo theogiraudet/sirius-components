@@ -160,6 +160,7 @@ public class PropertiesDefaultDescriptionProvider implements IPropertiesDefaultD
 
         List<IfDescription> ifDescriptions = new ArrayList<>();
         ifDescriptions.add(new EStringIfDescriptionProvider(this.composedAdapterFactory, this.propertiesValidationProvider).getIfDescription());
+        ifDescriptions.add(new ERichStringIfDescriptionProvider(this.composedAdapterFactory, this.propertiesValidationProvider).getIfDescription());
         ifDescriptions.add(new EBooleanIfDescriptionProvider(this.composedAdapterFactory, this.propertiesValidationProvider).getIfDescription());
         ifDescriptions.add(new EEnumIfDescriptionProvider(this.composedAdapterFactory, this.propertiesValidationProvider).getIfDescription());
 

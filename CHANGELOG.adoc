@@ -8,6 +8,8 @@
 
 === Breaking changes
 
+- https://github.com/eclipse-sirius/sirius-components/issues/997[#997] [diagram] Edge routing points are not reset when on of the edge end is moving.
+
 === Dependency update
 
 === Bug fixes
@@ -15,6 +17,8 @@
 === Improvements
 
 === New Features
+
+- https://github.com/eclipse-sirius/sirius-components/issues/997[#997] [diagram] Add support for edition of routing points in diagrams
 
 == v2022.9.0
 

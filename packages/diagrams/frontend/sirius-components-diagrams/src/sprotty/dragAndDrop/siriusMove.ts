@@ -58,12 +58,16 @@ export class SiriusMoveCommand extends MoveCommand {
   /**
    * Updates edges label and, if necessary, edges routing points.
    *
-   * At this point provided edges source end or target - sometime both - end have been moved.
+   * At this point provided edges source end or target end - sometime both - have been moved.
    * If both ends of an edge have been moved, updates routing points position in addition of the edge label.
    *
    * If only one edge end has been moved, updates the edge label position only if the edge does not have routing points.
    * If the edge has routing points, its label is either positioned on a routing point, or on a section of the edge, and
    * thus, the label is not affected by the move.
+   *
+   * NOTE: Special case for self-loop edge. Their ends are contained in resolved moved, but they have already been
+   * updated by sprotty. Unfortunately Sprotty does not update the label of a self-loop edge, thus, we have to do it
+   * here.
    *
    * @param edgeToUpdate The set of edge that have their source end or target end move, directly or indirectly
    */
@@ -72,7 +76,10 @@ export class SiriusMoveCommand extends MoveCommand {
       const firstMove = (this.resolvedMoves.values().next() as IteratorYieldResult<ResolvedElementMove>).value;
       const delta = Point.subtract(firstMove.toPosition, firstMove.fromPosition);
       edgeToUpdate.forEach((edge) => {
-        if (this.isContainedInResolvedMove(edge.source) && this.isContainedInResolvedMove(edge.target)) {
+        if (edge.targetId === edge.sourceId) {
+          // Routing points have already been updated by Sprotty but not the label which is why the edge label is updated here.
+          this.updateEdgeLabelPositionFromDelta(edge, delta);
+        } else if (this.isContainedInResolvedMove(edge.source) && this.isContainedInResolvedMove(edge.target)) {
           // Both edge ends are contained in the move
           edge.routingPoints = edge.routingPoints.map((rp) => Point.add(rp, delta));
           this.updateEdgeLabelPositionFromDelta(edge, delta);

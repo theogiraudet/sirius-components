@@ -20,7 +20,11 @@ const preventRemovalOfUnusedImportByPrettier = svg !== null;
  * View used to handle 'source', 'target' and 'junction' routing handles.
  */
 export class RoutingHandleView extends SRoutingHandleView {
-  render(handle: Readonly<SRoutingHandle>, context: RenderingContext, args?: { route?: RoutedPoint[] }): VNode {
+  override render(
+    handle: Readonly<SRoutingHandle>,
+    context: RenderingContext,
+    args?: { route?: RoutedPoint[] }
+  ): VNode {
     const handleVNode = super.render(handle, context, args);
     setAttr(handleVNode, 'stroke', 'var(--daintree)');
     setAttr(handleVNode, 'stroke-width', '1');
@@ -38,7 +42,7 @@ export class RoutingHandleView extends SRoutingHandleView {
     return handleVNode;
   }
 
-  getRadius(): number {
+  override getRadius(): number {
     return 2.5;
   }
 }

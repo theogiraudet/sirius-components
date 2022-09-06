@@ -33,7 +33,7 @@ export class SiriusSwitchEditModeCommand extends SwitchEditModeCommand {
     super(action);
   }
 
-  protected doExecute(context: CommandExecutionContext): SModelRoot {
+  protected override doExecute(context: CommandExecutionContext): SModelRoot {
     if (this.action.elementsToDeactivate.length > 0) {
       const modelElement = context.root.index.getById(this.action.elementsToDeactivate[0]);
       if (modelElement instanceof SRoutingHandle) {

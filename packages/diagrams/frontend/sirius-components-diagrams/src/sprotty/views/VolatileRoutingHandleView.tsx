@@ -20,7 +20,11 @@ const preventRemovalOfUnusedImportByPrettier = svg !== null;
  * View used to handle 'line' routing handles.
  */
 export class VolatileRoutingHandleView extends SRoutingHandleView {
-  render(handle: Readonly<SRoutingHandle>, context: RenderingContext, args?: { route?: RoutedPoint[] }): VNode {
+  override render(
+    handle: Readonly<SRoutingHandle>,
+    context: RenderingContext,
+    args?: { route?: RoutedPoint[] }
+  ): VNode {
     const handleVNode = super.render(handle, context, args);
     setAttr(handleVNode, 'stroke', 'var(--daintree)');
     setAttr(handleVNode, 'stroke-width', '1');
@@ -39,7 +43,7 @@ export class VolatileRoutingHandleView extends SRoutingHandleView {
     return handleVNode;
   }
 
-  getRadius(): number {
+  override getRadius(): number {
     return 2.5;
   }
 }

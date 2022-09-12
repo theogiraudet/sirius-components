@@ -316,6 +316,14 @@ type TreeNode {
   selectable: Boolean!
 }
 
+type RichText implements Widget {
+  id: ID!
+  diagnostics: [Diagnostic!]!
+  label: String!
+  iconURL: String
+  value: String!
+}
+
 type FormDescription implements RepresentationDescription {
   id: ID!
   label: String!
@@ -327,6 +335,7 @@ extend type Mutation {
   editRadio(input: EditRadioInput!): EditRadioPayload!
   editSelect(input: EditSelectInput!): EditSelectPayload!
   editTextfield(input: EditTextfieldInput!): EditTextfieldPayload!
+  editRichText(input: EditRichTextInput!): EditRichTextPayload!
   updateWidgetFocus(input: UpdateWidgetFocusInput!): UpdateWidgetFocusPayload!
   clickListItem(input: ClickListItemInput!): ClickListItemPayload!
   deleteListItem(input: DeleteListItemInput!): DeleteListItemPayload!
@@ -402,6 +411,21 @@ union EditTextfieldPayload = ErrorPayload | EditTextfieldSuccessPayload
 type EditTextfieldSuccessPayload {
   id: ID!
 }
+
+input EditRichTextInput {
+  id: ID!
+  editingContextId: ID!
+  representationId: ID!
+  richTextId: ID!
+  newValue: String!
+}
+
+union EditRichTextPayload = ErrorPayload | EditRichTextSuccessPayload
+
+type EditRichTextSuccessPayload {
+  id: ID!
+}
+
 
 input UpdateWidgetFocusInput {
   id: ID!

@@ -24,6 +24,7 @@ import org.eclipse.sirius.components.forms.description.LinkDescription;
 import org.eclipse.sirius.components.forms.description.ListDescription;
 import org.eclipse.sirius.components.forms.description.MultiSelectDescription;
 import org.eclipse.sirius.components.forms.description.RadioDescription;
+import org.eclipse.sirius.components.forms.description.RichTextDescription;
 import org.eclipse.sirius.components.forms.description.SelectDescription;
 import org.eclipse.sirius.components.forms.description.TextareaDescription;
 import org.eclipse.sirius.components.forms.description.TextfieldDescription;
@@ -94,6 +95,9 @@ public class WidgetComponent implements IComponent {
         } else if (widgetDescription instanceof TreeDescription) {
             TreeComponentProps treeComponentProps = new TreeComponentProps(variableManager, (TreeDescription) widgetDescription);
             element = new Element(TreeComponent.class, treeComponentProps);
+        } else if (widgetDescription instanceof RichTextDescription) {
+            RichTextComponentProps richTextComponentProps = new RichTextComponentProps(variableManager, (RichTextDescription) widgetDescription);
+            element = new Element(RichTextComponent.class, richTextComponentProps);
         } else {
             String pattern = "Unsupported widget description: {}"; //$NON-NLS-1$
             this.logger.warn(pattern, widgetDescription.getClass().getSimpleName());

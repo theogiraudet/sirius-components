@@ -96,6 +96,9 @@ export const formRefreshedEventPayloadFragment = `
     ... on TreeWidget {
       ...treeWidgetFields
     }
+    ... on RichText {
+      ...richTextFields
+    }
   }
 
   fragment commonFields on Widget {
@@ -354,4 +357,10 @@ export const formRefreshedEventPayloadFragment = `
       selectable
     }
   }
-`;
+  
+  fragment richTextFields on RichText {
+    label
+    iconURL
+    stringValue: value
+  }
+  `;

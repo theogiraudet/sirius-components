@@ -36,6 +36,7 @@ import org.eclipse.sirius.components.forms.Link;
 import org.eclipse.sirius.components.forms.MultiSelect;
 import org.eclipse.sirius.components.forms.Page;
 import org.eclipse.sirius.components.forms.Radio;
+import org.eclipse.sirius.components.forms.RichText;
 import org.eclipse.sirius.components.forms.Select;
 import org.eclipse.sirius.components.forms.Textarea;
 import org.eclipse.sirius.components.forms.Textfield;
@@ -52,6 +53,7 @@ import org.eclipse.sirius.components.forms.elements.ListElementProps;
 import org.eclipse.sirius.components.forms.elements.MultiSelectElementProps;
 import org.eclipse.sirius.components.forms.elements.PageElementProps;
 import org.eclipse.sirius.components.forms.elements.RadioElementProps;
+import org.eclipse.sirius.components.forms.elements.RichTextElementProps;
 import org.eclipse.sirius.components.forms.elements.SelectElementProps;
 import org.eclipse.sirius.components.forms.elements.TextareaElementProps;
 import org.eclipse.sirius.components.forms.elements.TextfieldElementProps;
@@ -109,6 +111,8 @@ public class FormElementFactory implements IElementFactory {
             object = this.instantiateFlexboxContainer((FlexboxContainerElementProps) props, children);
         } else if (TreeElementProps.TYPE.equals(type) && props instanceof TreeElementProps) {
             object = this.instantiateTree((TreeElementProps) props, children);
+        } else if (RichTextElementProps.TYPE.equals(type) && props instanceof RichTextElementProps) {
+            object = this.instantiateRichText((RichTextElementProps) props, children);
         }
 
         return object;
@@ -484,6 +488,22 @@ public class FormElementFactory implements IElementFactory {
                 .expandedNodesIds(props.getExpandedNodesIds())
                 .diagnostics(diagnostics)
                 .build();
+       // @formatter:on
+    }
+
+    private RichText instantiateRichText(RichTextElementProps props, List<Object> children) {
+        List<Diagnostic> diagnostics = this.getDiagnosticsFromChildren(children);
+
+        // @formatter:off
+        RichText.Builder builder = RichText.newRichText(props.getId())
+                .label(props.getLabel())
+                .value(props.getValue())
+                .newValueHandler(props.getNewValueHandler())
+                .diagnostics(diagnostics);
+        if (props.getIconURL() != null) {
+            builder.iconURL(props.getIconURL());
+        }
+        return builder.build();
        // @formatter:on
     }
 

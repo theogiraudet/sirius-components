@@ -26,6 +26,7 @@ import org.eclipse.sirius.components.forms.elements.ListElementProps;
 import org.eclipse.sirius.components.forms.elements.MultiSelectElementProps;
 import org.eclipse.sirius.components.forms.elements.PageElementProps;
 import org.eclipse.sirius.components.forms.elements.RadioElementProps;
+import org.eclipse.sirius.components.forms.elements.RichTextElementProps;
 import org.eclipse.sirius.components.forms.elements.SelectElementProps;
 import org.eclipse.sirius.components.forms.elements.TextareaElementProps;
 import org.eclipse.sirius.components.forms.elements.TextfieldElementProps;
@@ -83,6 +84,8 @@ public class FormInstancePropsValidator implements IInstancePropsValidator {
             checkValidProps = props instanceof FlexboxContainerElementProps;
         } else if (TreeElementProps.TYPE.equals(type)) {
             checkValidProps = props instanceof TreeElementProps;
+        } else if (RichTextElementProps.TYPE.equals(type)) {
+            checkValidProps = props instanceof RichTextElementProps;
         }
 
         return checkValidProps;

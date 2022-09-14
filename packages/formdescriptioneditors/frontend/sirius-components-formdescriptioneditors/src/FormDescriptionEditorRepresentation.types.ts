@@ -23,4 +23,5 @@ export type Kind =
   | 'List'
   | 'BarChart'
   | 'PieChart'
-  | 'FlexboxContainer';
+  | 'FlexboxContainer'
+  | 'RichText';

@@ -46,6 +46,7 @@ import { ListWidget } from './ListWidget';
 import { MultiSelectWidget } from './MultiSelectWidget';
 import { PieChartWidget } from './PieChartWidget';
 import { RadioWidget } from './RadioWidget';
+import { RichTextWidget } from './RichTextWidget';
 import { SelectWidget } from './SelectWidget';
 import { TextAreaWidget } from './TextAreaWidget';
 import { TextfieldWidget } from './TextfieldWidget';
@@ -261,6 +262,16 @@ export const WidgetEntry = ({
   } else if (widget.kind === 'TextArea') {
     widgetElement = (
       <TextAreaWidget
+        data-testid={widget.id}
+        widget={widget}
+        selection={selection}
+        setSelection={setSelection}
+        onDropBefore={onDropBefore}
+      />
+    );
+  } else if (widget.kind === 'RichText') {
+    widgetElement = (
+      <RichTextWidget
         data-testid={widget.id}
         widget={widget}
         selection={selection}

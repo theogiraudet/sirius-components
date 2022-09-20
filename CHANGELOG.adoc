@@ -22,6 +22,7 @@
 === New Features
 
 - https://github.com/eclipse-sirius/sirius-components/issues/997[#997] [diagram] Add support for edition of routing points in diagrams
+- https://github.com/eclipse-sirius/sirius-components/issues/780[#780] [diagram] Add support for edge reconnection. edge reconnection description can be defined either inside a classical sirius desktop VSM or, using the View DSL. While using the sirius desktop VSM you can defined a tool to do both target and source reconnection, you will need to defined a tool to reconnect the source and another one to reconnect the target using the View DSL.
 
 == v2022.9.0
 

@@ -23,10 +23,12 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.sirius.components.collaborative.diagrams.api.IParametricSVGImageRegistry;
 import org.eclipse.sirius.components.collaborative.forms.services.api.IPropertiesDescriptionRegistry;
 import org.eclipse.sirius.components.collaborative.forms.services.api.IPropertiesDescriptionRegistryConfigurer;
 import org.eclipse.sirius.components.collaborative.validation.api.IValidationService;
@@ -70,13 +72,16 @@ public class NodeStylePropertiesConfigurer implements IPropertiesDescriptionRegi
 
     private final Function<VariableManager, List<?>> semanticElementsProvider = variableManager -> variableManager.get(VariableManager.SELF, Object.class).stream().collect(Collectors.toList());
 
+    private final List<IParametricSVGImageRegistry> parametricSVGImageRegistries;
+
     private final ICustomImageSearchService customImageSearchService;
 
     private final IValidationService validationService;
 
-    public NodeStylePropertiesConfigurer(ICustomImageSearchService customImageSearchService, IValidationService validationService) {
+    public NodeStylePropertiesConfigurer(ICustomImageSearchService customImageSearchService, IValidationService validationService, List<IParametricSVGImageRegistry> parametricSVGImageRegistries) {
         this.validationService = Objects.requireNonNull(validationService);
         this.customImageSearchService = Objects.requireNonNull(customImageSearchService);
+        this.parametricSVGImageRegistries = parametricSVGImageRegistries;
     }
 
     @Override
@@ -182,6 +187,10 @@ public class NodeStylePropertiesConfigurer implements IPropertiesDescriptionRegi
                         style -> ((NodeStyleDescription) style).getSizeComputationExpression(),
                         (style, newSizeExpression) -> ((NodeStyleDescription) style).setSizeComputationExpression(newSizeExpression),
                         ViewPackage.Literals.NODE_STYLE_DESCRIPTION__SIZE_COMPUTATION_EXPRESSION),
+                this.createCheckbox("nodestyle.showIcon", "Show Icon", //$NON-NLS-1$ //$NON-NLS-2$
+                        style -> ((NodeStyleDescription) style).isShowIcon(),
+                        (style, newValue) -> ((NodeStyleDescription) style).setShowIcon(newValue),
+                        ViewPackage.Literals.NODE_STYLE_DESCRIPTION__SHOW_ICON),
                 this.createTextField("nodestyle.labelColor", "Label Color", //$NON-NLS-1$ //$NON-NLS-2$
                         style -> ((NodeStyleDescription) style).getLabelColor(),
                         (style, newLabelColor) -> ((NodeStyleDescription) style).setLabelColor(newLabelColor),
@@ -365,14 +374,20 @@ public class NodeStylePropertiesConfigurer implements IPropertiesDescriptionRegi
                 .labelProvider(variableManager -> "Shape") //$NON-NLS-1$
                 .valueProvider(variableManager -> variableManager.get(VariableManager.SELF, ImageNodeStyleDescription.class).map(ImageNodeStyleDescription::getShape).orElse(EMPTY))
                 .optionsProvider(variableManager -> {
+                    List<CustomImage> parametricSVGs = this.parametricSVGImageRegistries.stream()
+                        .flatMap(service-> service.getImages().stream())
+                        .map(image -> new CustomImage(image.getId(), image.getLabel(), "image/svg+xml")) //$NON-NLS-1$
+                        .collect(Collectors.toList());
+
+                    List<CustomImage> customImages = List.of();
                     Optional<IEditingContext> optionalEditingContext = variableManager.get(IEditingContext.EDITING_CONTEXT, IEditingContext.class);
                     if (optionalEditingContext.isPresent()) {
-                        return this.customImageSearchService.getAvailableImages(optionalEditingContext.get().getId()).stream()
+                        customImages =  this.customImageSearchService.getAvailableImages(optionalEditingContext.get().getId()).stream()
                                 .sorted(Comparator.comparing(CustomImage::getLabel))
                                 .collect(Collectors.toList());
-                    } else {
-                        return List.of();
                     }
+                    return Stream.concat(parametricSVGs.stream(), customImages.stream())
+                            .collect(Collectors.toList());
                 })
                 .optionIdProvider(variableManager -> variableManager.get(SelectComponent.CANDIDATE_VARIABLE, CustomImage.class)
                         .map(CustomImage::getId)

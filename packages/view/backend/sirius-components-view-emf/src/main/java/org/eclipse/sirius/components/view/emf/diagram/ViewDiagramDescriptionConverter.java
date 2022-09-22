@@ -112,10 +112,10 @@ public class ViewDiagramDescriptionConverter implements IRepresentationDescripti
         return UUID.nameUUIDFromBytes(EcoreUtil.getURI(diagramElementDescription).toString().getBytes());
     };
 
-    public ViewDiagramDescriptionConverter(IObjectService objectService, IEditService editService) {
+    public ViewDiagramDescriptionConverter(IObjectService objectService, IEditService editService, StylesFactory stylesFactory) {
         this.objectService = Objects.requireNonNull(objectService);
         this.editService = Objects.requireNonNull(editService);
-        this.stylesFactory = new StylesFactory();
+        this.stylesFactory = Objects.requireNonNull(stylesFactory);
         this.semanticTargetIdProvider = variableManager -> this.self(variableManager).map(this.objectService::getId).orElse(null);
         this.semanticTargetKindProvider = variableManager -> this.self(variableManager).map(this.objectService::getKind).orElse(null);
         this.semanticTargetLabelProvider = variableManager -> this.self(variableManager).map(this.objectService::getLabel).orElse(null);

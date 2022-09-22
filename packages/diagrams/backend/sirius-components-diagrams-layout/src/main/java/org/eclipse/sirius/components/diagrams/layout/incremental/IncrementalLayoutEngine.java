@@ -42,6 +42,7 @@ import org.eclipse.sirius.components.diagrams.layout.incremental.data.NodeLayout
 import org.eclipse.sirius.components.diagrams.layout.incremental.provider.BorderNodeLabelPositionProvider;
 import org.eclipse.sirius.components.diagrams.layout.incremental.provider.EdgeLabelPositionProvider;
 import org.eclipse.sirius.components.diagrams.layout.incremental.provider.EdgeRoutingPointsProvider;
+import org.eclipse.sirius.components.diagrams.layout.incremental.provider.ICustomNodeLabelPositionProvider;
 import org.eclipse.sirius.components.diagrams.layout.incremental.provider.NodeLabelPositionProvider;
 import org.eclipse.sirius.components.diagrams.layout.incremental.provider.NodePositionProvider;
 import org.eclipse.sirius.components.diagrams.layout.incremental.provider.NodeSizeProvider;
@@ -78,8 +79,11 @@ public class IncrementalLayoutEngine {
 
     private final NodeSizeProvider nodeSizeProvider;
 
-    public IncrementalLayoutEngine(NodeSizeProvider nodeSizeProvider) {
+    private final List<ICustomNodeLabelPositionProvider> customLabelPositionProviders;
+
+    public IncrementalLayoutEngine(NodeSizeProvider nodeSizeProvider, List<ICustomNodeLabelPositionProvider> customLabelPositionProviders) {
         this.nodeSizeProvider = Objects.requireNonNull(nodeSizeProvider);
+        this.customLabelPositionProviders = Objects.requireNonNull(customLabelPositionProviders);
     }
 
     public void layout(Optional<IDiagramEvent> optionalDiagramElementEvent, DiagramLayoutData diagram, ISiriusWebLayoutConfigurator layoutConfigurator) {
@@ -160,7 +164,17 @@ public class IncrementalLayoutEngine {
 
         // recompute the label
         if (node.getLabel() != null) {
-            node.getLabel().setPosition(this.nodeLabelPositionProvider.getPosition(node, node.getLabel(), borderNodesOnSide));
+            Position nodeLabelPosition = this.nodeLabelPositionProvider.getPosition(node, node.getLabel(), borderNodesOnSide);
+            // The label position may be customized
+            for (ICustomNodeLabelPositionProvider customLabelPositionProvider : this.customLabelPositionProviders) {
+                Optional<Position> nodeLabelPositionOpt = customLabelPositionProvider.getLabelPosition(layoutConfigurator, node.getLabel().getTextBounds().getSize(), node.getSize(),
+                        node.getNodeType(), node.getStyle());
+                if (nodeLabelPositionOpt.isPresent()) {
+                    nodeLabelPosition = nodeLabelPositionOpt.get();
+                    break;
+                }
+            }
+            node.getLabel().setPosition(nodeLabelPosition);
         }
     }
 
